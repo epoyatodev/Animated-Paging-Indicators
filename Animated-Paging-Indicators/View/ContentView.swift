@@ -12,22 +12,26 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                ScrollView(.horizontal) {
-                    LazyHStack(spacing: 0) {
-                        ForEach(colors, id: \.self) { color in
-                            RoundedRectangle(cornerRadius: 26)
-                                .fill(color.gradient)
-                                .padding(.horizontal)
-                                .containerRelativeFrame(.horizontal)
+                ScrollViewReader { scrollView in 
+                    ScrollView(.horizontal) {
+                        LazyHStack(spacing: 0) {
+                            ForEach(0..<colors.count, id: \.self) { index in
+                                RoundedRectangle(cornerRadius: 26)
+                                    .fill(colors[index].gradient)
+                                    .padding(.horizontal)
+                                    .containerRelativeFrame(.horizontal)
+                                    .id(index)
+                            }
+                        }
+                        .overlay(alignment: .bottom) {
+                            PagingIndicator(activeTint: .white, scrollViewProxy: scrollView)
+                                
                         }
                     }
-                    .overlay(alignment: .bottom) {
-                        PagingIndicator(activeTint: .white)
-                    }
+                    .scrollTargetBehavior(.paging)
+                    .frame(height: 500)
+                    .scrollIndicators(.hidden)
                 }
-                .scrollTargetBehavior(.paging)
-                .frame(height: 500)
-                .scrollIndicators(.hidden)
             }
             .navigationTitle("Paging Indicator")
         }

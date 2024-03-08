@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PagingIndicator: View {
     var activeTint: Color = .primary
+    var scrollViewProxy: ScrollViewProxy
     var body: some View {
         GeometryReader {
             let width = $0.size.width
@@ -31,8 +32,11 @@ struct PagingIndicator: View {
                             .fill(activeTint)
                             .frame(width: 8 + (activeIndex == index ? currentPageWidth : nextIndex == index ? nextPageWidth : 0), height: 8)
                             .onTapGesture {
-                                
+                                withAnimation {
+                                    scrollViewProxy.scrollTo(index)
+                                }
                             }
+                            
                     }
                 }
                 .frame(width: scrollViewWidth)
